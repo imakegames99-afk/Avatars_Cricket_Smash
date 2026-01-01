@@ -1,129 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>AVATAR CRICKET SMASH</title>
+    <meta charset="UTF-8">
+    <title>AVATAR_CRICKET_SMASH_OFFICIAL_WEBSITE</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="GLB cricket avatars preview and download" />
+    <meta name="description"
+          content="Download high-quality GLB models for games, avatars, and web projects">
 
-<!-- model-viewer -->
-<script type="module"
-  src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
-</script>
+    <!-- Google Model Viewer (GLB preview engine) -->
+    <script type="module"
+            src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+    </script>
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #020617;
-  color: #e5e7eb;
-}
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(180deg, #020617, #0b3b82);
+            color: #e5e7eb;
+        }
 
-header {
-  padding: 40px;
-  text-align: center;
-  background: #020617;
-}
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, #020617, #1d4ed8);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
 
-h1 {
-  color: #38bdf8;
-}
+        header h1 {
+            margin: 0;
+            font-size: 42px;
+            letter-spacing: 2px;
+            color: #38bdf8;
+        }
 
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-}
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 30px;
+        }
 
-.card {
-  background: #020617;
-  border-radius: 14px;
-  margin-bottom: 40px;
-  padding: 20px;
-  box-shadow: 0 0 30px rgba(0,0,0,.5);
-}
+        .glb-item {
+            background: rgba(2,6,23,0.92);
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
 
-model-viewer {
-  width: 100%;
-  height: 320px;
-  background: #020617;
-}
-</style>
+        .glb-item h2 {
+            color: #7dd3fc;
+            margin-bottom: 12px;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 320px;
+            background: #020617;
+            border-radius: 14px;
+        }
+
+        .glb-item p {
+            margin-top: 15px;
+            line-height: 1.7;
+            font-size: 15px;
+            color: #cbd5f5;
+        }
+
+        .glb-item a {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 22px;
+            background: linear-gradient(135deg, #2563eb, #38bdf8);
+            color: #020617;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 15px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+    </style>
 </head>
 
 <body>
 
 <header>
-  <h1>AVATAR CRICKET SMASH</h1>
-  <p>3D GLB Preview powered by Cloudflare R2</p>
+    <h1>AVATAR_CRICKET_SMASH</h1>
 </header>
 
-<div class="container" id="list"></div>
+<div class="container" id="glbContainer"></div>
+
+<footer>
+    <p>© 2025 AVATAR_CRICKET_SMASH</p>
+</footer>
 
 <script>
-const R2 = "https://pub-f52eac7742c84d37968670f98377a702.r2.dev";
+    /* 🔥 CHANGE ONLY THIS IF YOUR R2 URL CHANGES */
+    const CLOUDFLARE_BASE_URL =
+        "https://pub-f52eac7742c84d37968670f98377a702.r2.dev/models";
 
-const desc = {
-  1: "Fearless left-hand batsman. No bowler scares him.",
-  2: "Right-hand batsman with world-class timing.",
-  3: "Can hit sixes from anywhere.",
-  4: "Classy six machine.",
-  5: "Left-hand all-rounder, must-have player.",
-  6: "Super hitman, title winner.",
-  7: "Yorker king, destroys legends.",
-  8: "Left-arm swing destroyer.",
-  9: "Mystery bowler, unreadable.",
-  10: "Tall wicket taker.",
-  11: "Golden left-hand beauty.",
-  12: "Women power hitter.",
-  13: "Swing queen.",
-  14: "Pure hard hitter.",
-  15: "Most successful woman cricketer.",
-  16: "Left-right all-rounder.",
-  17: "Little queen.",
-  18: "Run machine king.",
-  19: "Hero of cricket.",
-  20: "Wins matches injured.",
-  21: "Most handsome star.",
-  22: "Name = work.",
-  23: "T20 double century dreamer.",
-  24: "Fastest over magician.",
-  25: "Success everywhere.",
-  26: "Googly master.",
-  27: "One-ball finisher.",
-  28: "The ruler.",
-  29: "Stump breaker.",
-  30: "Magic ball master."
-};
+    const glbDescriptions = {
+        1: "GLB Model 1 is optimized for real-time avatar systems and lightweight games.",
+        2: "GLB Model 2 focuses on clean topology and animation-friendly structure.",
+        3: "GLB Model 3 is designed for high performance without sacrificing clarity.",
+        4: "GLB Model 4 balances visual quality and rendering efficiency.",
+        5: "GLB Model 5 is lightweight and fast-loading.",
+        6: "GLB Model 6 is optimized for animation workflows.",
+        7: "GLB Model 7 features clean geometry and stable structure.",
+        8: "GLB Model 8 is suitable for games and avatar platforms.",
+        9: "GLB Model 9 emphasizes performance optimization.",
+        10: "GLB Model 10 is designed for scalable projects.",
+        11: "GLB Model 11 offers clean topology.",
+        12: "GLB Model 12 is optimized for customization.",
+        13: "GLB Model 13 focuses on efficient geometry.",
+        14: "GLB Model 14 provides a stable structure.",
+        15: "GLB Model 15 is lightweight.",
+        16: "GLB Model 16 supports modern engines.",
+        17: "GLB Model 17 supports smooth animations.",
+        18: "GLB Model 18 is ideal for avatars.",
+        19: "GLB Model 19 features optimized topology.",
+        20: "GLB Model 20 balances performance and quality.",
+        21: "GLB Model 21 is optimized for WebGL.",
+        22: "GLB Model 22 supports efficient rendering.",
+        23: "GLB Model 23 is suitable for games.",
+        24: "GLB Model 24 provides clean geometry.",
+        25: "GLB Model 25 is designed for avatars.",
+        26: "GLB Model 26 emphasizes fast loading.",
+        27: "GLB Model 27 supports scalable projects.",
+        28: "GLB Model 28 is optimized for animation.",
+        29: "GLB Model 29 ensures compatibility.",
+        30: "GLB Model 30 is optimized for performance."
+    };
 
-const root = document.getElementById("list");
+    const container = document.getElementById("glbContainer");
 
-for (let i = 1; i <= 30; i++) {
-  root.innerHTML += `
-    <div class="card">
-      <h2>GLB ${i}</h2>
+    for (let i = 1; i <= 30; i++) {
+        const glbUrl = `${CLOUDFLARE_BASE_URL}/glb${i}.glb`;
 
-      <model-viewer
-        src="${R2}/assets/models/glb${i}.glb"
-        camera-controls
-        auto-rotate
-        shadow-intensity="1"
-        exposure="1"
-        ar
-        loading="eager">
-      </model-viewer>
+        container.innerHTML += `
+        <div class="glb-item">
+            <h2>GLB Model ${i}</h2>
 
-      <p>${desc[i]}</p>
+            <model-viewer
+                src="${glbUrl}"
+                camera-controls
+                auto-rotate
+                loading="lazy">
+            </model-viewer>
 
-      <a href="${R2}/assets/models/glb${i}.glb"
-         target="_blank"
-         style="color:#38bdf8">
-         Download GLB
-      </a>
-    </div>
-  `;
-}
+            <p>${glbDescriptions[i]}</p>
+
+            <a href="${glbUrl}" download>
+                Download GLB
+            </a>
+        </div>
+        `;
+    }
 </script>
 
 </body>
