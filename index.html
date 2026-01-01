@@ -13,6 +13,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(180deg, #020617, #0b3b82);
             color: #e5e7eb;
+            padding-bottom: 80px; /* Space for the fixed counter */
         }
 
         header {
@@ -31,12 +32,11 @@
             }
 
         .container {
-            max-width: 800px; /* Narrower container for better vertical flow */
+            max-width: 800px;
             margin: auto;
             padding: 40px 15px;
         }
 
-        /* Stack items vertically */
         .glb-list {
             display: flex;
             flex-direction: column;
@@ -48,25 +48,28 @@
             border: 1px solid #1e293b;
             border-radius: 24px;
             padding: 30px;
-            transition: 0.3s;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Center content vertically */
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            align-items: center;
+            opacity: 0.3; /* Dimmed until it starts loading */
+            transition: opacity 0.5s ease;
         }
 
-            .glb-item:hover {
+            .glb-item.loading {
+                opacity: 0.7;
+                border-color: #2563eb;
+            }
+
+            .glb-item.loaded {
+                opacity: 1;
                 border-color: #38bdf8;
-                transform: translateY(-5px);
-                box-shadow: 0 15px 35px rgba(56, 189, 248, 0.2);
             }
 
         model-viewer {
             width: 100%;
-            height: 450px; /* Larger preview for vertical layout */
+            height: 450px;
             background: radial-gradient(#1e293b, #010409);
             border-radius: 16px;
-            --poster-color: transparent;
         }
 
         .info-box {
@@ -78,46 +81,42 @@
         h2 {
             color: #7dd3fc;
             font-size: 24px;
-            margin: 0 0 15px 0;
-            letter-spacing: 1px;
+            margin-bottom: 15px;
         }
 
         p {
             font-size: 16px;
             line-height: 1.8;
             color: #cbd5e1;
-            margin: 0 auto 25px auto;
-            max-width: 600px;
+            margin-bottom: 25px;
         }
 
         .btn-download {
             display: inline-block;
             min-width: 200px;
-            text-align: center;
             padding: 16px 32px;
             background: linear-gradient(135deg, #2563eb, #38bdf8);
             color: #020617;
             text-decoration: none;
             font-weight: bold;
             border-radius: 12px;
-            transition: 0.3s;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-size: 14px;
         }
 
-            .btn-download:hover {
-                filter: brightness(1.1);
-                transform: scale(1.05);
-                box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
-            }
-
-        footer {
+        /* Fixed Footer Counter */
+        #load-status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(2, 6, 23, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px;
             text-align: center;
-            padding: 60px 20px;
-            color: #64748b;
-            font-size: 14px;
-            border-top: 1px solid #1e293b;
+            border-top: 2px solid #38bdf8;
+            color: #38bdf8;
+            font-weight: bold;
+            z-index: 1000;
         }
     </style>
 </head>
@@ -125,20 +124,19 @@
 
     <header>
         <h1>AVATAR_CRICKET_SMASH</h1>
-        <p style="color: #94a3b8; margin-top: 10px;">The Ultimate 3D Cricket Collection</p>
+        <p style="color: #94a3b8; margin-top: 10px;">Sequential High-Quality Loading</p>
     </header>
 
     <div class="container">
         <div class="glb-list" id="glbContainer"></div>
     </div>
 
-    <footer>
-        <p>© 2025 AVATAR_CRICKET_SMASH | All Models Hosted on Cloudflare R2</p>
-    </footer>
+    <div id="load-status-bar">
+        Initializing Gallery...
+    </div>
 
     <script>
         const BASE_URL = "https://pub-f52eac7742c84d37968670f98377a702.r2.dev";
-
         const glbDescriptions = {
             1: "A fearless left-hand batsman who respects no bowler. Pace, spin, pressure — nothing matters to him. He plays with raw confidence and brutal intent.",
             2: "A fantastic right-hand batsman with extraordinary class. His timing is pure, his balance flawless, and his stroke play elegant.",
@@ -173,33 +171,62 @@
         };
 
         const container = document.getElementById("glbContainer");
+        const statusBar = document.getElementById("load-status-bar");
+        const totalModels = 30;
 
-        for (let i = 1; i <= 30; i++) {
-            const modelPath = `${BASE_URL}/models/glb${i}.glb`;
-            // Links to your local HTML files in the 'glbs' folder
-            const localHtmlLink = `glbs/glb${i}.html`;
+        async function loadGallery() {
+            for (let i = 1; i <= totalModels; i++) {
+                // Update the status bar
+                const remaining = totalModels - i;
+                statusBar.innerText = `🔄 Loading Avatar ${i} of ${totalModels}... (${remaining} remaining)`;
 
-            container.innerHTML += `
-        <div class="glb-item">
-            <model-viewer
-                src="${modelPath}"
-                camera-controls
-                auto-rotate
-                shadow-intensity="1"
-                loading="lazy"
-                environment-image="neutral"
-                exposure="1"
-                ar>
-            </model-viewer>
+                await new Promise((resolve) => {
+                    const modelPath = `${BASE_URL}/models/glb${i}.glb`;
+                    const localHtmlLink = `glbs/glb${i}.html`;
 
-            <div class="info-box">
-                <h2>Cricket Avatar #${i}</h2>
-                <p>${glbDescriptions[i]}</p>
-                <a href="${localHtmlLink}" class="btn-download">Download</a>
-            </div>
-        </div>
-        `;
+                    const item = document.createElement("div");
+                    item.className = "glb-item loading";
+                    item.innerHTML = `
+                        <model-viewer
+                            src="${modelPath}"
+                            camera-controls
+                            auto-rotate
+                            shadow-intensity="1"
+                            environment-image="neutral"
+                            exposure="1"
+                            ar>
+                        </model-viewer>
+                        <div class="info-box">
+                            <h2>Cricket Avatar #${i}</h2>
+                            <p>${glbDescriptions[i]}</p>
+                            <a href="${localHtmlLink}" class="btn-download">Download</a>
+                        </div>
+                    `;
+
+                    container.appendChild(item);
+
+                    const viewer = item.querySelector("model-viewer");
+
+                    // We wait for the 'poster-dismissed' or 'load' event
+                    viewer.addEventListener("load", () => {
+                        item.classList.remove("loading");
+                        item.classList.add("loaded");
+                        resolve(); // Move to the next iteration of the loop
+                    });
+
+                    // Error fallback so the whole page doesn't get stuck if one link is broken
+                    viewer.addEventListener("error", () => {
+                        item.style.borderColor = "red";
+                        resolve();
+                    });
+                });
+            }
+            statusBar.style.color = "#4ade80";
+            statusBar.innerText = "✅ All Avatars Loaded Successfully!";
         }
+
+        // Start the sequential load
+        loadGallery();
     </script>
 
 </body>
