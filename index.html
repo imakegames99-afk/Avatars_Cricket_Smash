@@ -2,165 +2,205 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AVATAR_CRICKET_SMASH_OFFICIAL_WEBSITE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVATAR_CRICKET_SMASH_OFFICIAL</title>
 
-    <meta name="description"
-          content="Preview high-quality GLB models for games, avatars, and web projects">
-
-    <!-- Google Model Viewer -->
-    <script type="module"
-            src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
-    </script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(180deg, #020617, #0b3b82);
             color: #e5e7eb;
         }
 
         header {
             text-align: center;
-            padding: 50px 20px;
+            padding: 60px 20px;
             background: linear-gradient(135deg, #020617, #1d4ed8);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 42px;
-            letter-spacing: 2px;
-            color: #38bdf8;
-        }
+            header h1 {
+                margin: 0;
+                font-size: clamp(28px, 6vw, 42px);
+                color: #38bdf8;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+            }
 
         .container {
-            max-width: 900px;
+            max-width: 800px; /* Narrower container for better vertical flow */
             margin: auto;
-            padding: 30px;
+            padding: 40px 15px;
+        }
+
+        /* Stack items vertically */
+        .glb-list {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
         }
 
         .glb-item {
-            background: rgba(2,6,23,0.92);
-            border-radius: 18px;
-            padding: 25px;
-            margin-bottom: 40px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background: rgba(2, 6, 23, 0.95);
+            border: 1px solid #1e293b;
+            border-radius: 24px;
+            padding: 30px;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content vertically */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
-        .glb-item h2 {
-            color: #7dd3fc;
-            margin-bottom: 12px;
-        }
+            .glb-item:hover {
+                border-color: #38bdf8;
+                transform: translateY(-5px);
+                box-shadow: 0 15px 35px rgba(56, 189, 248, 0.2);
+            }
 
         model-viewer {
             width: 100%;
-            height: 320px;
-            background: #020617;
-            border-radius: 14px;
+            height: 450px; /* Larger preview for vertical layout */
+            background: radial-gradient(#1e293b, #010409);
+            border-radius: 16px;
+            --poster-color: transparent;
         }
 
-        .glb-item p {
-            margin-top: 15px;
-            line-height: 1.7;
-            font-size: 15px;
-            color: #cbd5f5;
+        .info-box {
+            width: 100%;
+            text-align: center;
+            margin-top: 25px;
         }
 
-        .glb-item a {
+        h2 {
+            color: #7dd3fc;
+            font-size: 24px;
+            margin: 0 0 15px 0;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #cbd5e1;
+            margin: 0 auto 25px auto;
+            max-width: 600px;
+        }
+
+        .btn-download {
             display: inline-block;
-            margin-top: 15px;
-            padding: 12px 22px;
+            min-width: 200px;
+            text-align: center;
+            padding: 16px 32px;
             background: linear-gradient(135deg, #2563eb, #38bdf8);
             color: #020617;
             text-decoration: none;
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 12px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 14px;
         }
+
+            .btn-download:hover {
+                filter: brightness(1.1);
+                transform: scale(1.05);
+                box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+            }
 
         footer {
             text-align: center;
-            padding: 30px 15px;
-            color: #94a3b8;
+            padding: 60px 20px;
+            color: #64748b;
             font-size: 14px;
+            border-top: 1px solid #1e293b;
         }
     </style>
 </head>
-
 <body>
 
-<header>
-    <h1>AVATAR_CRICKET_SMASH</h1>
-</header>
+    <header>
+        <h1>AVATAR_CRICKET_SMASH</h1>
+        <p style="color: #94a3b8; margin-top: 10px;">The Ultimate 3D Cricket Collection</p>
+    </header>
 
-<div class="container" id="glbContainer"></div>
+    <div class="container">
+        <div class="glb-list" id="glbContainer"></div>
+    </div>
 
-<footer>
-    <p>© 2025 AVATAR_CRICKET_SMASH</p>
-</footer>
+    <footer>
+        <p>© 2025 AVATAR_CRICKET_SMASH | All Models Hosted on Cloudflare R2</p>
+    </footer>
 
-<script>
-    const BASE_GLB_URL =
-        "https://pub-f52eac7742c84d37968670f98377a702.r2.dev/models";
+    <script>
+        const BASE_URL = "https://pub-f52eac7742c84d37968670f98377a702.r2.dev";
 
-    const glbDescriptions = {
-        1: "GLB Model 1 is optimized for real-time avatar systems and lightweight games.",
-        2: "GLB Model 2 focuses on clean topology and animation-friendly structure.",
-        3: "GLB Model 3 is designed for high performance without sacrificing visual clarity.",
-        4: "GLB Model 4 provides a balance between visual detail and rendering efficiency.",
-        5: "GLB Model 5 is built for fast loading and low memory usage.",
-        6: "GLB Model 6 is optimized for animation workflows.",
-        7: "GLB Model 7 features clean UVs and optimized materials.",
-        8: "GLB Model 8 is suitable for games and avatar platforms.",
-        9: "GLB Model 9 emphasizes performance optimization.",
-        10: "GLB Model 10 is designed for scalable projects.",
-        11: "GLB Model 11 offers clean topology.",
-        12: "GLB Model 12 is optimized for customization.",
-        13: "GLB Model 13 focuses on efficient geometry.",
-        14: "GLB Model 14 provides a stable structure.",
-        15: "GLB Model 15 is lightweight.",
-        16: "GLB Model 16 supports modern engines.",
-        17: "GLB Model 17 supports smooth animations.",
-        18: "GLB Model 18 is ideal for avatars.",
-        19: "GLB Model 19 features optimized topology.",
-        20: "GLB Model 20 balances performance and quality.",
-        21: "GLB Model 21 is optimized for WebGL.",
-        22: "GLB Model 22 supports efficient rendering.",
-        23: "GLB Model 23 is suitable for games.",
-        24: "GLB Model 24 provides clean geometry.",
-        25: "GLB Model 25 is designed for avatars.",
-        26: "GLB Model 26 emphasizes fast loading.",
-        27: "GLB Model 27 supports scalable projects.",
-        28: "GLB Model 28 is optimized for animation.",
-        29: "GLB Model 29 ensures compatibility.",
-        30: "GLB Model 30 is optimized for performance."
-    };
+        const glbDescriptions = {
+            1: "A fearless left-hand batsman who respects no bowler. Pace, spin, pressure — nothing matters to him. He plays with raw confidence and brutal intent.",
+            2: "A fantastic right-hand batsman with extraordinary class. His timing is pure, his balance flawless, and his stroke play elegant.",
+            3: "This batsman can hit a six from anywhere on the ground. All he needs is a bat and a ball. Boundaries follow him naturally.",
+            4: "A classy batsman who can do exactly what you want. Controlled aggression, elegant shots, and unstoppable six-hitting ability.",
+            5: "A left-hand all-rounder every team dreams of. He bats with confidence and takes wickets wildly. Dangerous with both bat and ball.",
+            6: "The super hit man. The title winner. Built on pure hard work and determination, this mighty player delivers when it matters most.",
+            7: "The mightiest bowler with a terrifying action. Even the strongest kings have failed against him. A master of yorkers and pressure.",
+            8: "Singh is swing. A deadly left-arm bowler who can destroy any batting lineup. His swing is sharp, late, and absolutely lethal.",
+            9: "The mystery man. His hands hide secrets, his deliveries confuse everyone. Nothing about him is predictable.",
+            10: "The new tall striker of the team. A wicket taker with bounce, reach, and power. Built to dominate modern fast-paced matches.",
+            11: "A gorgeous cricketer with a golden left hand. He can hit you anywhere on the field — and you won’t even mind watching it.",
+            12: "The super hit woman. Do not try bowling to her — the ball always ends up in the pavilion. Absolute domination.",
+            13: "The swinging woman cricketer. Deadly with movement, dangerous with charm. Try not to lose your wicket.",
+            14: "Only one style: hard hitting. No filters, no mercy. You know exactly what that means when he walks in.",
+            15: "The pride of women’s cricket. The most successful and graceful performer. A holy presence on the field.",
+            16: "Beautiful action, beautiful balance. A left-hand batsman and right-hand bowler — the perfect all-rounder package.",
+            17: "The little queen of cricket. Calm, confident, and fearless. Small in appearance, massive in impact.",
+            18: "The king of runs. It doesn’t matter where he is placed — he deserves it. A pure run machine built for records.",
+            19: "The hero of cricket. You already know who he is when he arrives. Game-changer, crowd-raiser, legend.",
+            20: "He can win matches even with broken legs. But keep him away from the stumps — chaos follows him everywhere.",
+            21: "The most handsome guy on the field. Perfect for ads and movies, but he followed his heart and chose cricket.",
+            22: "The name of the man is the work of the man. Same words, same meaning — pure performance.",
+            23: "Please score a double century in T20I. Crazy ambition, insane execution. Built for impossible challenges.",
+            24: "The man with the fastest over. Brilliant, explosive, and deadly. A personal favorite for pure speed lovers.",
+            25: "Success follows him everywhere. Every format, every condition, every challenge — he delivers.",
+            26: "The deep thinker of cricket. His googly can decide the future of a match in a single moment.",
+            27: "Just give him one ball. One chance. He is always ready, always focused, always dangerous.",
+            28: "The ruler of the game. Bigger than empires, stronger than history. When he plays, others follow.",
+            29: "Unbelievable talent. Blink and your stumps are gone. Stay alert — this one punishes mistakes instantly.",
+            30: "The man with the magic ball. You already know the story — once it leaves his hand, anything can happen."
+        };
 
-    const container = document.getElementById("glbContainer");
+        const container = document.getElementById("glbContainer");
 
-    for (let i = 1; i <= 30; i++) {
-        const glbUrl = `${BASE_GLB_URL}/glb${i}.glb`;
+        for (let i = 1; i <= 30; i++) {
+            const modelPath = `${BASE_URL}/models/glb${i}.glb`;
+            // Links to your local HTML files in the 'glbs' folder
+            const localHtmlLink = `glbs/glb${i}.html`;
 
-        container.innerHTML += `
+            container.innerHTML += `
         <div class="glb-item">
-            <h2>GLB Model ${i}</h2>
-
             <model-viewer
-                src="${glbUrl}"
+                src="${modelPath}"
                 camera-controls
                 auto-rotate
-                loading="lazy">
+                shadow-intensity="1"
+                loading="lazy"
+                environment-image="neutral"
+                exposure="1"
+                ar>
             </model-viewer>
 
-            <p>${glbDescriptions[i]}</p>
-
-            <a href="glbs/glb${i}.html">
-                View Details & Download
-            </a>
+            <div class="info-box">
+                <h2>Cricket Avatar #${i}</h2>
+                <p>${glbDescriptions[i]}</p>
+                <a href="${localHtmlLink}" class="btn-download">Download</a>
+            </div>
         </div>
         `;
-    }
-</script>
+        }
+    </script>
 
 </body>
 </html>
