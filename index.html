@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AVATAR_CRICKET_SMASH_OFFICIAL_WEBSITE</title>
+
+    <meta name="description"
+          content="Download high-quality GLB models for games, avatars, and web projects">
+
+    <!-- Google Model Viewer -->
+    <script type="module"
+            src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(180deg, #020617, #0b3b82);
+            color: #e5e7eb;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, #020617, #1d4ed8);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+            header h1 {
+                margin: 0;
+                font-size: 42px;
+                letter-spacing: 2px;
+                color: #38bdf8;
+            }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .glb-item {
+            background: rgba(2,6,23,0.92);
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+            .glb-item h2 {
+                color: #7dd3fc;
+                margin-bottom: 12px;
+            }
+
+        model-viewer {
+            width: 100%;
+            height: 320px;
+            background: #020617;
+            border-radius: 14px;
+        }
+
+        .glb-item p {
+            margin-top: 15px;
+            line-height: 1.7;
+            font-size: 15px;
+            color: #cbd5f5;
+        }
+
+        .glb-item a {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 22px;
+            background: linear-gradient(135deg, #2563eb, #38bdf8);
+            color: #020617;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 15px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>AVATAR_CRICKET_SMASH</h1>
+    </header>
+
+    <div class="container" id="glbContainer"></div>
+
+    <footer>
+        <p>© 2025 AVATAR_CRICKET_SMASH</p>
+    </footer>
+
+    <script>
+        const glbDescriptions = {
+            1: "GLB Model 1 is optimized for real-time avatar systems and lightweight games. The geometry is carefully balanced to ensure fast rendering across mobile, desktop, and WebGL platforms. Clean UV mapping allows easy texture replacement and customization. This model is ideal for characters, NPCs, and interactive experiences in Unity, Unreal Engine, Blender, and browser-based viewers.",
+            2: "GLB Model 2 focuses on clean topology and animation-friendly structure. It is suitable for sports games, simulations, and avatar-based platforms. Optimized materials ensure fast loading and consistent visuals. The model integrates smoothly with Unity, Unreal Engine, Blender, and WebGL pipelines.",
+            3: "GLB Model 3 is designed for high performance without sacrificing visual clarity. The mesh is optimized for smooth deformation and customization. Ideal for interactive demos, avatars, and real-time environments across mobile and desktop platforms.",
+            4: "GLB Model 4 provides a balance between visual detail and rendering efficiency. It is suitable for multiplayer games and scalable web experiences. Clean geometry ensures compatibility with modern real-time engines.",
+            5: "GLB Model 5 is built for fast loading and low memory usage. The structure supports easy recoloring and texture changes, making it perfect for customizable avatar systems.",
+            6: "GLB Model 6 is optimized for animation workflows and real-time rendering. Its efficient topology allows smooth performance across WebGL, mobile, and desktop applications.",
+            7: "GLB Model 7 features clean UVs and optimized materials. It integrates seamlessly into Unity, Unreal Engine, and browser-based viewers for real-time use.",
+            8: "GLB Model 8 is suitable for games, simulations, and avatar platforms. Lightweight geometry ensures consistent frame rates even on low-end devices.",
+            9: "GLB Model 9 emphasizes performance optimization and flexibility. Ideal for character-based applications and interactive web experiences.",
+            10: "GLB Model 10 is designed for scalable projects requiring fast load times and smooth rendering. Compatible with modern 3D engines and WebGL viewers.",
+            11: "GLB Model 11 offers clean topology and efficient materials for real-time applications. Suitable for mobile games and browser-based experiences.",
+            12: "GLB Model 12 is optimized for customization and performance. Ideal for avatars, NPCs, and interactive characters.",
+            13: "GLB Model 13 focuses on efficient geometry and compatibility across platforms. Perfect for real-time rendering pipelines.",
+            14: "GLB Model 14 provides a stable structure for animation and customization. Suitable for games and interactive simulations.",
+            15: "GLB Model 15 is lightweight and optimized for fast deployment in WebGL and mobile environments.",
+            16: "GLB Model 16 is designed for modern real-time engines with clean UV mapping and efficient materials.",
+            17: "GLB Model 17 supports smooth animations and scalable performance across devices.",
+            18: "GLB Model 18 is ideal for avatar systems and interactive applications requiring fast load times.",
+            19: "GLB Model 19 features optimized topology and flexible customization options.",
+            20: "GLB Model 20 balances performance and visual quality for real-time use.",
+            21: "GLB Model 21 is optimized for WebGL and mobile-friendly experiences.",
+            22: "GLB Model 22 supports efficient rendering and smooth integration into modern engines.",
+            23: "GLB Model 23 is suitable for games, simulations, and browser-based 3D viewers.",
+            24: "GLB Model 24 provides clean geometry and consistent performance across platforms.",
+            25: "GLB Model 25 is designed for real-time avatars and lightweight applications.",
+            26: "GLB Model 26 emphasizes fast loading and easy customization.",
+            27: "GLB Model 27 supports scalable projects and multiplayer environments.",
+            28: "GLB Model 28 is optimized for animation and real-time rendering.",
+            29: "GLB Model 29 ensures compatibility with Unity, Unreal, and WebGL viewers.",
+            30: "GLB Model 30 is optimized for performance-critical applications and modern web experiences."
+        };
+
+        const container = document.getElementById("glbContainer");
+
+        for (let i = 1; i <= 30; i++) {
+            container.innerHTML += `
+        <div class="glb-item">
+          <h2>GLB Model ${i}</h2>
+
+          <model-viewer
+            src="assets/models/glb${i}.glb"
+            camera-controls
+            auto-rotate
+            loading="lazy">
+          </model-viewer>
+
+          <p>${glbDescriptions[i]}</p>
+
+          <a href="glbs/glb${i}.html">View & Download</a>
+        </div>
+      `;
+        }
+    </script>
+
+</body>
+</html>
