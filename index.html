@@ -1,163 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>AVATAR_CRICKET_SMASH_OFFICIAL_WEBSITE</title>
+<meta charset="UTF-8" />
+<title>AVATAR CRICKET SMASH</title>
 
-    <meta name="description"
-          content="Download high-quality GLB cricket avatars for games, avatars, and web projects">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="GLB cricket avatars preview and download" />
 
-    <!-- Google Model Viewer -->
-    <script type="module"
-            src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
-    </script>
+<!-- model-viewer -->
+<script type="module"
+  src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+</script>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(180deg, #020617, #0b3b82);
-            color: #e5e7eb;
-        }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #020617;
+  color: #e5e7eb;
+}
 
-        header {
-            text-align: center;
-            padding: 50px 20px;
-            background: linear-gradient(135deg, #020617, #1d4ed8);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+header {
+  padding: 40px;
+  text-align: center;
+  background: #020617;
+}
 
-            header h1 {
-                margin: 0;
-                font-size: 42px;
-                letter-spacing: 2px;
-                color: #38bdf8;
-            }
+h1 {
+  color: #38bdf8;
+}
 
-        .container {
-            max-width: 900px;
-            margin: auto;
-            padding: 30px;
-        }
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
 
-        .glb-item {
-            background: rgba(2,6,23,0.92);
-            border-radius: 18px;
-            padding: 25px;
-            margin-bottom: 40px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
+.card {
+  background: #020617;
+  border-radius: 14px;
+  margin-bottom: 40px;
+  padding: 20px;
+  box-shadow: 0 0 30px rgba(0,0,0,.5);
+}
 
-            .glb-item h2 {
-                color: #7dd3fc;
-                margin-bottom: 12px;
-            }
-
-        model-viewer {
-            width: 100%;
-            height: 320px;
-            background: #020617;
-            border-radius: 14px;
-        }
-
-        .glb-item p {
-            margin-top: 15px;
-            line-height: 1.7;
-            font-size: 15px;
-            color: #cbd5f5;
-        }
-
-        .glb-item a {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 12px 22px;
-            background: linear-gradient(135deg, #2563eb, #38bdf8);
-            color: #020617;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 10px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px 15px;
-            color: #94a3b8;
-            font-size: 14px;
-        }
-    </style>
+model-viewer {
+  width: 100%;
+  height: 320px;
+  background: #020617;
+}
+</style>
 </head>
 
 <body>
 
-    <header>
-        <h1>AVATAR_CRICKET_SMASH</h1>
-    </header>
+<header>
+  <h1>AVATAR CRICKET SMASH</h1>
+  <p>3D GLB Preview powered by Cloudflare R2</p>
+</header>
 
-    <div class="container" id="glbContainer"></div>
+<div class="container" id="list"></div>
 
-    <footer>
-        <p>© 2025 AVATAR_CRICKET_SMASH</p>
-    </footer>
+<script>
+const R2 = "https://pub-f52eac7742c84d37968670f98377a702.r2.dev";
 
-    <script>
-        const BASE_URL = "https://pub-f52eac7742c84d37968670f98377a702.r2.dev";
+const desc = {
+  1: "Fearless left-hand batsman. No bowler scares him.",
+  2: "Right-hand batsman with world-class timing.",
+  3: "Can hit sixes from anywhere.",
+  4: "Classy six machine.",
+  5: "Left-hand all-rounder, must-have player.",
+  6: "Super hitman, title winner.",
+  7: "Yorker king, destroys legends.",
+  8: "Left-arm swing destroyer.",
+  9: "Mystery bowler, unreadable.",
+  10: "Tall wicket taker.",
+  11: "Golden left-hand beauty.",
+  12: "Women power hitter.",
+  13: "Swing queen.",
+  14: "Pure hard hitter.",
+  15: "Most successful woman cricketer.",
+  16: "Left-right all-rounder.",
+  17: "Little queen.",
+  18: "Run machine king.",
+  19: "Hero of cricket.",
+  20: "Wins matches injured.",
+  21: "Most handsome star.",
+  22: "Name = work.",
+  23: "T20 double century dreamer.",
+  24: "Fastest over magician.",
+  25: "Success everywhere.",
+  26: "Googly master.",
+  27: "One-ball finisher.",
+  28: "The ruler.",
+  29: "Stump breaker.",
+  30: "Magic ball master."
+};
 
-        const glbDescriptions = {
-            1: "A fearless left-hand batsman who respects no bowler. Pace, spin, pressure — nothing matters to him. He plays with raw confidence and brutal intent. If you want a player who can attack anyone, anywhere, this character belongs in your game.",
-            2: "A fantastic right-hand batsman with extraordinary class. His timing is pure, his balance flawless, and his stroke play elegant. A complete top-order batter designed for players who value precision and cricketing beauty.",
-            3: "This batsman can hit a six from anywhere on the ground. All he needs is a bat and a ball. Boundaries follow him naturally, making him perfect for explosive gameplay moments.",
-            4: "A classy batsman who can do exactly what you want. Controlled aggression, elegant shots, and unstoppable six-hitting ability. A true six machine with unmatched style.",
-            5: "A left-hand all-rounder every team dreams of. He bats with confidence and takes wickets wildly. Dangerous with both bat and ball, he changes matches on his own.",
-            6: "The super hit man. The title winner. Built on pure hard work and determination, this mighty player delivers when it matters most. Loved by fans, feared by opponents.",
-            7: "The mightiest bowler with a terrifying action. Even the strongest kings have failed against him. A master of yorkers and pressure deliveries.",
-            8: "Singh is swing. A deadly left-arm bowler who can destroy any batting lineup. His swing is sharp, late, and absolutely lethal.",
-            9: "The mystery man. His hands hide secrets, his deliveries confuse everyone. Nothing about him is predictable — and that is his biggest weapon.",
-            10: "The new tall striker of the team. A wicket taker with bounce, reach, and power. Built to dominate modern fast-paced matches.",
-            11: "A gorgeous cricketer with a golden left hand. He can hit you anywhere on the field — and you won’t even mind watching it.",
-            12: "The super hit woman. Do not try bowling to her — the ball always ends up in the pavilion. Absolute domination with fearless power.",
-            13: "The swinging woman cricketer. Deadly with movement, dangerous with charm. Try not to fall — I mean, lose your wicket.",
-            14: "Only one style: hard hitting. No filters, no mercy. You know exactly what that means when he walks in.",
-            15: "The pride of women’s cricket. The most successful and graceful performer. A holy presence on the field, winning hearts and matches.",
-            16: "Beautiful action, beautiful balance. A left-hand batsman and right-hand bowler — the perfect left-right all-rounder package.",
-            17: "The little queen of cricket. Calm, confident, and fearless. Small in appearance, massive in impact.",
-            18: "The king of runs. It doesn’t matter where he is placed — he deserves it. A pure run machine built for records.",
-            19: "Oh my god — the hero of cricket. You already know who he is when he arrives. Game-changer, crowd-raiser, legend.",
-            20: "He can win matches even with broken legs. But keep him away from the stumps — chaos follows him everywhere.",
-            21: "The most handsome guy on the field. Perfect for ads and movies, but he followed his heart and chose cricket.",
-            22: "The name of the man is the work of the man. Same words, same meaning — pure performance.",
-            23: "Please score a double century in T20I. Crazy ambition, insane execution. Built for impossible challenges.",
-            24: "The man with the fastest over. Brilliant, explosive, and deadly. A personal favorite for pure speed lovers.",
-            25: "Success follows him everywhere. Every format, every condition, every challenge — he delivers.",
-            26: "The deep thinker of cricket. His googly can decide the future of a match in a single moment.",
-            27: "Just give him one ball. One chance. He is always ready, always focused, always dangerous.",
-            28: "The ruler of the game. Bigger than empires, stronger than history. When he plays, others follow.",
-            29: "Unbelievable talent. Blink and your stumps are gone. Stay alert — this one punishes mistakes instantly.",
-            30: "The man with the magic ball. You already know the story — once it leaves his hand, anything can happen."
-        };
+const root = document.getElementById("list");
 
-        const container = document.getElementById("glbContainer");
+for (let i = 1; i <= 30; i++) {
+  root.innerHTML += `
+    <div class="card">
+      <h2>GLB ${i}</h2>
 
-        for (let i = 1; i <= 30; i++) {
-            container.innerHTML += `
-        <div class="glb-item">
-            <h2>GLB Model ${i}</h2>
+      <model-viewer
+        src="${R2}/assets/models/glb${i}.glb"
+        camera-controls
+        auto-rotate
+        shadow-intensity="1"
+        exposure="1"
+        ar
+        loading="eager">
+      </model-viewer>
 
-            <model-viewer
-                src="${BASE_URL}/assets/models/glb${i}.glb"
-                camera-controls
-                auto-rotate
-                loading="lazy">
-            </model-viewer>
+      <p>${desc[i]}</p>
 
-            <p>${glbDescriptions[i]}</p>
-
-            <a href="${BASE_URL}/glbs/glb${i}.html" target="_blank">
-                View & Download
-            </a>
-        </div>
-        `;
-        }
-    </script>
+      <a href="${R2}/assets/models/glb${i}.glb"
+         target="_blank"
+         style="color:#38bdf8">
+         Download GLB
+      </a>
+    </div>
+  `;
+}
+</script>
 
 </body>
 </html>
