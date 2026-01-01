@@ -5,9 +5,9 @@
     <title>AVATAR_CRICKET_SMASH_OFFICIAL_WEBSITE</title>
 
     <meta name="description"
-          content="Download high-quality GLB models for games, avatars, and web projects">
+          content="Preview high-quality GLB models for games, avatars, and web projects">
 
-    <!-- Google Model Viewer (GLB preview engine) -->
+    <!-- Google Model Viewer -->
     <script type="module"
             src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
     </script>
@@ -100,18 +100,17 @@
 </footer>
 
 <script>
-    /* 🔥 CHANGE ONLY THIS IF YOUR R2 URL CHANGES */
-    const CLOUDFLARE_BASE_URL =
+    const BASE_GLB_URL =
         "https://pub-f52eac7742c84d37968670f98377a702.r2.dev/models";
 
     const glbDescriptions = {
         1: "GLB Model 1 is optimized for real-time avatar systems and lightweight games.",
         2: "GLB Model 2 focuses on clean topology and animation-friendly structure.",
-        3: "GLB Model 3 is designed for high performance without sacrificing clarity.",
-        4: "GLB Model 4 balances visual quality and rendering efficiency.",
-        5: "GLB Model 5 is lightweight and fast-loading.",
+        3: "GLB Model 3 is designed for high performance without sacrificing visual clarity.",
+        4: "GLB Model 4 provides a balance between visual detail and rendering efficiency.",
+        5: "GLB Model 5 is built for fast loading and low memory usage.",
         6: "GLB Model 6 is optimized for animation workflows.",
-        7: "GLB Model 7 features clean geometry and stable structure.",
+        7: "GLB Model 7 features clean UVs and optimized materials.",
         8: "GLB Model 8 is suitable for games and avatar platforms.",
         9: "GLB Model 9 emphasizes performance optimization.",
         10: "GLB Model 10 is designed for scalable projects.",
@@ -140,7 +139,7 @@
     const container = document.getElementById("glbContainer");
 
     for (let i = 1; i <= 30; i++) {
-        const glbUrl = `${CLOUDFLARE_BASE_URL}/glb${i}.glb`;
+        const glbUrl = `${BASE_GLB_URL}/glb${i}.glb`;
 
         container.innerHTML += `
         <div class="glb-item">
@@ -155,8 +154,8 @@
 
             <p>${glbDescriptions[i]}</p>
 
-            <a href="${glbUrl}" download>
-                Download GLB
+            <a href="glbs/glb${i}.html">
+                View Details & Download
             </a>
         </div>
         `;
