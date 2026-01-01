@@ -5,7 +5,7 @@
     <title>AVATAR_CRICKET_SMASH_OFFICIAL_WEBSITE</title>
 
     <meta name="description"
-          content="Download high-quality GLB models for games, avatars, and web projects">
+          content="Download high-quality GLB cricket avatars for games, avatars, and web projects">
 
     <!-- Google Model Viewer -->
     <script type="module"
@@ -100,37 +100,39 @@
     </footer>
 
     <script>
+        const BASE_URL = "https://pub-f52eac7742c84d37968670f98377a702.r2.dev";
+
         const glbDescriptions = {
-            1: "GLB Model 1 is optimized for real-time avatar systems and lightweight games. The geometry is carefully balanced to ensure fast rendering across mobile, desktop, and WebGL platforms. Clean UV mapping allows easy texture replacement and customization. This model is ideal for characters, NPCs, and interactive experiences in Unity, Unreal Engine, Blender, and browser-based viewers.",
-            2: "GLB Model 2 focuses on clean topology and animation-friendly structure. It is suitable for sports games, simulations, and avatar-based platforms. Optimized materials ensure fast loading and consistent visuals. The model integrates smoothly with Unity, Unreal Engine, Blender, and WebGL pipelines.",
-            3: "GLB Model 3 is designed for high performance without sacrificing visual clarity. The mesh is optimized for smooth deformation and customization. Ideal for interactive demos, avatars, and real-time environments across mobile and desktop platforms.",
-            4: "GLB Model 4 provides a balance between visual detail and rendering efficiency. It is suitable for multiplayer games and scalable web experiences. Clean geometry ensures compatibility with modern real-time engines.",
-            5: "GLB Model 5 is built for fast loading and low memory usage. The structure supports easy recoloring and texture changes, making it perfect for customizable avatar systems.",
-            6: "GLB Model 6 is optimized for animation workflows and real-time rendering. Its efficient topology allows smooth performance across WebGL, mobile, and desktop applications.",
-            7: "GLB Model 7 features clean UVs and optimized materials. It integrates seamlessly into Unity, Unreal Engine, and browser-based viewers for real-time use.",
-            8: "GLB Model 8 is suitable for games, simulations, and avatar platforms. Lightweight geometry ensures consistent frame rates even on low-end devices.",
-            9: "GLB Model 9 emphasizes performance optimization and flexibility. Ideal for character-based applications and interactive web experiences.",
-            10: "GLB Model 10 is designed for scalable projects requiring fast load times and smooth rendering. Compatible with modern 3D engines and WebGL viewers.",
-            11: "GLB Model 11 offers clean topology and efficient materials for real-time applications. Suitable for mobile games and browser-based experiences.",
-            12: "GLB Model 12 is optimized for customization and performance. Ideal for avatars, NPCs, and interactive characters.",
-            13: "GLB Model 13 focuses on efficient geometry and compatibility across platforms. Perfect for real-time rendering pipelines.",
-            14: "GLB Model 14 provides a stable structure for animation and customization. Suitable for games and interactive simulations.",
-            15: "GLB Model 15 is lightweight and optimized for fast deployment in WebGL and mobile environments.",
-            16: "GLB Model 16 is designed for modern real-time engines with clean UV mapping and efficient materials.",
-            17: "GLB Model 17 supports smooth animations and scalable performance across devices.",
-            18: "GLB Model 18 is ideal for avatar systems and interactive applications requiring fast load times.",
-            19: "GLB Model 19 features optimized topology and flexible customization options.",
-            20: "GLB Model 20 balances performance and visual quality for real-time use.",
-            21: "GLB Model 21 is optimized for WebGL and mobile-friendly experiences.",
-            22: "GLB Model 22 supports efficient rendering and smooth integration into modern engines.",
-            23: "GLB Model 23 is suitable for games, simulations, and browser-based 3D viewers.",
-            24: "GLB Model 24 provides clean geometry and consistent performance across platforms.",
-            25: "GLB Model 25 is designed for real-time avatars and lightweight applications.",
-            26: "GLB Model 26 emphasizes fast loading and easy customization.",
-            27: "GLB Model 27 supports scalable projects and multiplayer environments.",
-            28: "GLB Model 28 is optimized for animation and real-time rendering.",
-            29: "GLB Model 29 ensures compatibility with Unity, Unreal, and WebGL viewers.",
-            30: "GLB Model 30 ."
+            1: "A fearless left-hand batsman who respects no bowler. Pace, spin, pressure — nothing matters to him. He plays with raw confidence and brutal intent. If you want a player who can attack anyone, anywhere, this character belongs in your game.",
+            2: "A fantastic right-hand batsman with extraordinary class. His timing is pure, his balance flawless, and his stroke play elegant. A complete top-order batter designed for players who value precision and cricketing beauty.",
+            3: "This batsman can hit a six from anywhere on the ground. All he needs is a bat and a ball. Boundaries follow him naturally, making him perfect for explosive gameplay moments.",
+            4: "A classy batsman who can do exactly what you want. Controlled aggression, elegant shots, and unstoppable six-hitting ability. A true six machine with unmatched style.",
+            5: "A left-hand all-rounder every team dreams of. He bats with confidence and takes wickets wildly. Dangerous with both bat and ball, he changes matches on his own.",
+            6: "The super hit man. The title winner. Built on pure hard work and determination, this mighty player delivers when it matters most. Loved by fans, feared by opponents.",
+            7: "The mightiest bowler with a terrifying action. Even the strongest kings have failed against him. A master of yorkers and pressure deliveries.",
+            8: "Singh is swing. A deadly left-arm bowler who can destroy any batting lineup. His swing is sharp, late, and absolutely lethal.",
+            9: "The mystery man. His hands hide secrets, his deliveries confuse everyone. Nothing about him is predictable — and that is his biggest weapon.",
+            10: "The new tall striker of the team. A wicket taker with bounce, reach, and power. Built to dominate modern fast-paced matches.",
+            11: "A gorgeous cricketer with a golden left hand. He can hit you anywhere on the field — and you won’t even mind watching it.",
+            12: "The super hit woman. Do not try bowling to her — the ball always ends up in the pavilion. Absolute domination with fearless power.",
+            13: "The swinging woman cricketer. Deadly with movement, dangerous with charm. Try not to fall — I mean, lose your wicket.",
+            14: "Only one style: hard hitting. No filters, no mercy. You know exactly what that means when he walks in.",
+            15: "The pride of women’s cricket. The most successful and graceful performer. A holy presence on the field, winning hearts and matches.",
+            16: "Beautiful action, beautiful balance. A left-hand batsman and right-hand bowler — the perfect left-right all-rounder package.",
+            17: "The little queen of cricket. Calm, confident, and fearless. Small in appearance, massive in impact.",
+            18: "The king of runs. It doesn’t matter where he is placed — he deserves it. A pure run machine built for records.",
+            19: "Oh my god — the hero of cricket. You already know who he is when he arrives. Game-changer, crowd-raiser, legend.",
+            20: "He can win matches even with broken legs. But keep him away from the stumps — chaos follows him everywhere.",
+            21: "The most handsome guy on the field. Perfect for ads and movies, but he followed his heart and chose cricket.",
+            22: "The name of the man is the work of the man. Same words, same meaning — pure performance.",
+            23: "Please score a double century in T20I. Crazy ambition, insane execution. Built for impossible challenges.",
+            24: "The man with the fastest over. Brilliant, explosive, and deadly. A personal favorite for pure speed lovers.",
+            25: "Success follows him everywhere. Every format, every condition, every challenge — he delivers.",
+            26: "The deep thinker of cricket. His googly can decide the future of a match in a single moment.",
+            27: "Just give him one ball. One chance. He is always ready, always focused, always dangerous.",
+            28: "The ruler of the game. Bigger than empires, stronger than history. When he plays, others follow.",
+            29: "Unbelievable talent. Blink and your stumps are gone. Stay alert — this one punishes mistakes instantly.",
+            30: "The man with the magic ball. You already know the story — once it leaves his hand, anything can happen."
         };
 
         const container = document.getElementById("glbContainer");
@@ -138,23 +140,24 @@
         for (let i = 1; i <= 30; i++) {
             container.innerHTML += `
         <div class="glb-item">
-          <h2>GLB Model ${i}</h2>
+            <h2>GLB Model ${i}</h2>
 
-          <model-viewer
-            src="assets/models/glb${i}.glb"
-            camera-controls
-            auto-rotate
-            loading="lazy">
-          </model-viewer>
+            <model-viewer
+                src="${BASE_URL}/assets/models/glb${i}.glb"
+                camera-controls
+                auto-rotate
+                loading="lazy">
+            </model-viewer>
 
-          <p>${glbDescriptions[i]}</p>
+            <p>${glbDescriptions[i]}</p>
 
-          <a href="glbs/glb${i}.html">View & Download</a>
+            <a href="${BASE_URL}/glbs/glb${i}.html" target="_blank">
+                View & Download
+            </a>
         </div>
-      `;
+        `;
         }
     </script>
 
 </body>
 </html>
-
