@@ -1,119 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>India Cricket Avatars</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4978654989713105"
-            crossorigin="anonymous"></script>
-    <script type="module"
-            src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js">
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avatar Cricket Smash – Create Your 3D Face</title>
 
-    <style>
-        body {
-            margin: 0;
-            background: #020617;
-            color: #e5e7eb;
-            font-family: Arial, sans-serif;
-        }
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/controls/OrbitControls.js"></script>
 
-        header {
-            text-align: center;
-            padding: 30px;
-        }
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(180deg, #020617, #0b3b82);
+    color: white;
+}
 
-        .container {
-            max-width: 900px;
-            margin: auto;
-            padding: 20px;
-        }
+/* HERO */
+header {
+    text-align: center;
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #020617, #1d4ed8);
+}
 
-        .glb-item {
-            margin-bottom: 60px;
-            background: rgba(2,6,23,0.9);
-            padding: 20px;
-            border-radius: 20px;
-        }
+header h1 {
+    font-size: 42px;
+    color: #38bdf8;
+}
 
-        model-viewer {
-            width: 100%;
-            height: 450px;
-            background: #010409;
-            border-radius: 16px;
-        }
+header p {
+    max-width: 600px;
+    margin: 20px auto;
+    color: #cbd5f5;
+}
 
-        img {
-            width: 100%;
-            border-radius: 12px;
-            margin-top: 15px;
-        }
+/* NAV */
+nav a {
+    margin: 0 10px;
+    color: #7dd3fc;
+    text-decoration: none;
+}
 
-        .downloads {
-            margin-top: 12px;
-            text-align: center;
-        }
+/* MAIN */
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 40px;
+    text-align: center;
+}
 
-            .downloads a {
-                display: inline-block;
-                margin: 6px 10px;
-                padding: 10px 22px;
-                border-radius: 999px;
-                background: #38bdf8;
-                color: #020617;
-                font-weight: bold;
-                text-decoration: none;
-            }
+/* UPLOAD */
+.upload-box {
+    border: 2px dashed #38bdf8;
+    padding: 30px;
+    border-radius: 15px;
+}
 
-        a.back {
-            color: #38bdf8;
-            text-decoration: none;
-            font-weight: bold;
-        }
-    </style>
+.btn {
+    margin-top: 15px;
+    padding: 12px 25px;
+    border-radius: 999px;
+    border: none;
+    background: #38bdf8;
+    cursor: pointer;
+}
+
+/* VIEWER */
+#viewer {
+    width: 100%;
+    height: 400px;
+    background: black;
+    margin-top: 30px;
+    border-radius: 15px;
+}
+
+/* LOADING */
+#loading {
+    display: none;
+    margin-top: 15px;
+    color: #38bdf8;
+}
+</style>
 </head>
 
 <body>
 
-    <header>
-        <h1>🇮🇳 India Cricket Avatars</h1>
-        <a href="index.html" class="back">← Back</a>
-    </header>
+<header>
+<h1>Create Your 3D Face</h1>
+<p>
+Upload your photo and generate a realistic 3D face mesh.
+Download it and use it in Avatar Cricket Smash.
+</p>
 
-    <div class="container" id="gallery"></div>
+<nav>
+<a href="about.html">About</a>
+<a href="privacy.html">Privacy</a>
+<a href="terms.html">Terms</a>
+<a href="ind.html">India Avatars</a>
+</nav>
+</header>
 
-    <script>
-        const gallery = document.getElementById("gallery");
+<div class="container">
 
-        // 1.glb → 11.glb
-        for (let i = 1; i <= 11; i++) {
-            const glbPath = `assets/models/Ind/${i}.glb`;
-            const texPath = `assets/textures/Ind/${i}.jpeg`;
+<h2>Generate Your 3D Avatar</h2>
 
-            const div = document.createElement("div");
-            div.className = "glb-item";
+<div class="upload-box">
+<input type="file" id="imageInput" accept="image/*"><br>
+<button class="btn" onclick="generate3D()">Generate 3D Face</button>
+</div>
 
-            div.innerHTML = `
-            <h2>Avatar #${i}</h2>
+<div id="loading">⏳ Generating your 3D face...</div>
 
-            <model-viewer
-                src="${glbPath}"
-                camera-controls
-                auto-rotate
-                shadow-intensity="1">
-            </model-viewer>
+<div id="viewer"></div>
 
-            <img src="${texPath}" alt="Texture ${i}">
+<button class="btn" onclick="downloadModel()">Download Mesh</button>
+<button class="btn" onclick="downloadTexture()">Download Texture</button>
 
-            <div class="downloads">
-                <a href="${glbPath}" download>⬇ Download GLB</a>
-                <a href="${texPath}" download>⬇ Download Texture</a>
-            </div>
-        `;
+</div>
 
-            gallery.appendChild(div);
-        }
-    </script>
+<script>
+const BASE_URL = "https://YOUR-WORKER-NAME.workers.dev";
+
+let scene, camera, renderer, controls;
+let generatedModelUrl = "";
+let generatedTextureUrl = "";
+
+/* INIT VIEWER */
+function initViewer() {
+    const container = document.getElementById("viewer");
+
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, container.clientWidth/container.clientHeight, 0.1, 1000);
+    camera.position.set(0, 1, 3);
+
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+
+    container.innerHTML = "";
+    container.appendChild(renderer.domElement);
+
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+    const light = new THREE.HemisphereLight(0xffffff, 0x444444, 2);
+    scene.add(light);
+
+    animate();
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+
+/* LOAD MODEL */
+function loadModel(url) {
+    const loader = new THREE.GLTFLoader();
+
+    loader.load(url, function(gltf) {
+        scene.clear();
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 2));
+        scene.add(gltf.scene);
+    });
+}
+
+/* GENERATE */
+async function generate3D() {
+    const file = document.getElementById("imageInput").files[0];
+
+    if (!file) return alert("Upload image first");
+
+    document.getElementById("loading").style.display = "block";
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+        const res = await fetch(`${BASE_URL}/generate`, {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await res.json();
+
+        generatedModelUrl = data.model_url;
+        generatedTextureUrl = data.texture_url;
+
+        initViewer();
+        loadModel(generatedModelUrl);
+
+    } catch (e) {
+        alert("Error generating model");
+    }
+
+    document.getElementById("loading").style.display = "none";
+}
+
+/* DOWNLOAD */
+function downloadModel() {
+    if (!generatedModelUrl) return alert("Generate first");
+    window.open(generatedModelUrl);
+}
+
+function downloadTexture() {
+    if (!generatedTextureUrl) return alert("Generate first");
+    window.open(generatedTextureUrl);
+}
+</script>
 
 </body>
 </html>
