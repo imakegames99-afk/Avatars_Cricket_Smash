@@ -13,7 +13,6 @@ body {
     color: white;
 }
 
-/* HEADER */
 header {
     text-align: center;
     padding: 60px 20px;
@@ -36,7 +35,6 @@ nav a {
     font-weight: bold;
 }
 
-/* MAIN */
 .container {
     max-width: 900px;
     margin: auto;
@@ -44,7 +42,6 @@ nav a {
     text-align: center;
 }
 
-/* UPLOAD */
 .upload-box {
     border: 2px dashed #38bdf8;
     padding: 30px;
@@ -61,7 +58,6 @@ nav a {
     font-weight: bold;
 }
 
-/* VIEWER */
 #viewer {
     width: 100%;
     height: 400px;
@@ -70,7 +66,6 @@ nav a {
     border-radius: 10px;
 }
 
-/* LOADING */
 #loading {
     display: none;
     margin-top: 15px;
@@ -122,17 +117,15 @@ footer {
 © 2026 Avatar Cricket Smash
 </footer>
 
-<!-- ✅ FIXED THREE JS MODULE VERSION -->
 <script type="module">
 
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
 import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js';
 
-/* 🔥 PUT YOUR WORKER URL HERE */
+/* ✅ YOUR WORKER URL (ALREADY SET) */
 const BASE_URL = "https://bitter-mountain-4202.rajibyoutbe541.workers.dev";
 
-/* VARIABLES */
 let scene, camera, renderer, controls;
 let generatedModelUrl = "";
 let generatedTextureUrl = "";
@@ -165,7 +158,7 @@ function initViewer() {
     animate();
 }
 
-/* ANIMATE */
+/* ANIMATION */
 function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
@@ -236,12 +229,18 @@ window.generate3D = async function () {
 
 /* DOWNLOAD */
 window.downloadModel = function () {
-    if (!generatedModelUrl) return alert("Generate first");
+    if (!generatedModelUrl) {
+        alert("Generate first");
+        return;
+    }
     window.open(generatedModelUrl);
 };
 
 window.downloadTexture = function () {
-    if (!generatedTextureUrl) return alert("Generate first");
+    if (!generatedTextureUrl) {
+        alert("Generate first");
+        return;
+    }
     window.open(generatedTextureUrl);
 };
 
