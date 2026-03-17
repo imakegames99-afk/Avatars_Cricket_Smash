@@ -2,32 +2,32 @@
 <html>
 <body style="background:#111;color:white;text-align:center;padding:40px">
 
-<h2>Generate 3D Model from Image URL</h2>
+<h2>Upload Image → 3D Model</h2>
 
-<input type="text" id="url" placeholder="Paste image URL here" style="width:300px"><br><br>
+<input type="file" id="file" accept="image/*"><br><br>
 <button onclick="generate()">Generate</button>
 
 <p id="status"></p>
 
 <script>
 async function generate() {
-  const url = document.getElementById("url").value;
+  const file = document.getElementById("file").files[0];
   const status = document.getElementById("status");
 
-  if (!url) {
-    alert("Paste image URL");
+  if (!file) {
+    alert("Select image");
     return;
   }
 
-  status.innerText = "⏳ Generating...";
+  status.innerText = "⏳ Uploading & generating...";
+
+  const formData = new FormData();
+  formData.append("image", file);
 
   try {
     const res = await fetch("https://bitter-mountain-4202.rajibyoutbe541.workers.dev/", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ image_url: url })
+      body: formData
     });
 
     const data = await res.json();
@@ -40,7 +40,7 @@ async function generate() {
     status.innerHTML = `
       ✅ Done! <br><br>
       <a href="${data.model.model_url}" target="_blank">
-        Download Model
+        Download 3D Model
       </a>
     `;
 
