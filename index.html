@@ -31,6 +31,7 @@ async function generate() {
     });
 
     const data = await res.json();
+    console.log("RESPONSE:", data);
 
     if (!data.success) {
       status.innerText = "❌ Error: " + JSON.stringify(data);
@@ -38,9 +39,9 @@ async function generate() {
     }
 
     status.innerHTML = `
-      ✅ Done! <br><br>
+      ✅ 3D Model Generated!<br><br>
       <a href="${data.model.model_url}" target="_blank">
-        Download 3D Model
+        Download Model
       </a>
     `;
 
