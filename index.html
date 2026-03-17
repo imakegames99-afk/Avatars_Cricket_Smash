@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-<body style="background:#111;color:white;text-align:center;padding:40px">
+<body>
 
-<h2>Upload Image → 3D Model</h2>
+<h2>Generate 3D Model</h2>
 
 <input type="file" id="file"><br><br>
 <button onclick="generate()">Generate</button>
@@ -19,7 +19,7 @@ async function generate() {
     return;
   }
 
-  status.innerText = "⏳ Processing...";
+  status.innerText = "⏳ Generating...";
 
   const formData = new FormData();
   formData.append("image", file);
@@ -39,7 +39,9 @@ async function generate() {
 
     status.innerHTML = `
       ✅ Done! <br><br>
-      <a href="${data.model.model_url}" target="_blank">Download Model</a>
+      <a href="${data.model.model_url}" target="_blank">
+        Download Model
+      </a>
     `;
 
   } catch (err) {
