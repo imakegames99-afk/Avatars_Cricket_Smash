@@ -1,99 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Cloudflare → Tripo 3D</title>
+  <title>AI 3D Generator</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      padding: 40px;
+      background: #111;
+      color: white;
+    }
+
+    .box {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 12px;
+      display: inline-block;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 15px;
+      border: none;
+      background: #00ffcc;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    button:hover {
+      background: #00ccaa;
+    }
+
+    #status {
+      margin-top: 20px;
+    }
+
+    a {
+      color: #00ffcc;
+    }
+  </style>
 </head>
 <body>
 
-<h2>Upload Image → Generate 3D</h2>
+<h1>Generate Your 3D Model</h1>
 
-<input type="file" id="fileInput">
-<button onclick="uploadAndGenerate()">Upload & Generate</button>
+<div class="box">
+  <input type="file" id="file"><br>
+  <button onclick="generate()">Generate 3D</button>
 
-<pre id="output"></pre>
+  <div id="status"></div>
+</div>
 
 <script>
-const CLOUDFLARE_ACCOUNT_ID = "YOUR_ACCOUNT_ID";
-const CLOUDFLARE_UPLOAD_TOKEN = "YOUR_UNSIGNED_UPLOAD_TOKEN";
-const TRIPO_API_KEY = "YOUR_TRIPO_API_KEY";
+async function generate() {
+  const file = document.getElementById("file").files[0];
+  const status = document.getElementById("status");
 
-async function uploadAndGenerate() {
-  const file = document.getElementById("fileInput").files[0];
-  if (!file) return alert("Select an image");
-
-  // STEP 1: Upload to Cloudflare
-  const formData = new FormData();
-  formData.append("file", file);
-
-  const uploadRes = await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/images/v1`,
-    {
-      method: "POST",
-      headers: {
-        "Authorization": "Bearer " + CLOUDFLARE_UPLOAD_TOKEN
-      },
-      body: formData
-    }
-  );
-
-  const uploadData = await uploadRes.json();
-  console.log("Upload:", uploadData);
-
-  if (!uploadData.success) {
-    document.getElementById("output").innerText = "Upload failed";
+  if (!file) {
+    alert("Select an image first");
     return;
   }
 
-  // Get public URL
-  const imageUrl = uploadData.result.variants[0];
-  console.log("Image URL:", imageUrl);
+  status.innerHTML = "⏳ Uploading & generating...";
 
-  // STEP 2: Send to Tripo
-  const taskRes = await fetch("https://api.tripo3d.ai/v2/openapi/task", {
-    method: "POST",
-    headers: {
-      "Authorization": "Bearer " + TRIPO_API_KEY,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      type: "image_to_model",
-      input: {
-        image_url: imageUrl
-      }
-    })
-  });
+  const formData = new FormData();
+  formData.append("image", file);
 
-  const taskData = await taskRes.json();
-  document.getElementById("output").innerText = JSON.stringify(taskData, null, 2);
-
-  const taskId = taskData?.data?.task_id;
-  if (taskId) checkStatus(taskId);
-}
-
-// STEP 3: Poll Tripo
-async function checkStatus(taskId) {
-  const interval = setInterval(async () => {
-    const res = await fetch(`https://api.tripo3d.ai/v2/openapi/task/${taskId}`, {
-      headers: {
-        "Authorization": "Bearer " + TRIPO_API_KEY
-      }
+  try {
+    const res = await fetch("https://YOUR-WORKER-URL.workers.dev", {
+      method: "POST",
+      body: formData
     });
 
     const data = await res.json();
-    document.getElementById("output").innerText = JSON.stringify(data, null, 2);
 
-    if (data.data.status === "success") {
-      clearInterval(interval);
-      alert("✅ 3D Model Ready!");
-      console.log("MODEL:", data.data.output);
+    if (!data.success) {
+      status.innerHTML = "❌ Error: " + JSON.stringify(data);
+      return;
     }
 
-    if (data.data.status === "failed") {
-      clearInterval(interval);
-      alert("❌ Failed");
-    }
+    status.innerHTML = `
+      ✅ Model Ready!<br><br>
+      <a href="${data.model.model_url}" target="_blank">
+        Download 3D Model
+      </a>
+    `;
 
-  }, 5000);
+  } catch (err) {
+    status.innerHTML = "❌ Failed: " + err.message;
+  }
 }
 </script>
 
