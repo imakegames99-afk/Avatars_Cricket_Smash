@@ -1,57 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>AI 3D Generator</title>
-  <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      padding: 40px;
-      background: #111;
-      color: white;
-    }
+<body style="background:#111;color:white;text-align:center;padding:40px">
 
-    .box {
-      background: #1e1e1e;
-      padding: 30px;
-      border-radius: 12px;
-      display: inline-block;
-    }
+<h2>Upload Image → 3D Model</h2>
 
-    button {
-      padding: 10px 20px;
-      margin-top: 15px;
-      border: none;
-      background: #00ffcc;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 8px;
-    }
+<input type="file" id="file"><br><br>
+<button onclick="generate()">Generate</button>
 
-    button:hover {
-      background: #00ccaa;
-    }
-
-    #status {
-      margin-top: 20px;
-    }
-
-    a {
-      color: #00ffcc;
-    }
-  </style>
-</head>
-<body>
-
-<h1>Generate Your 3D Model</h1>
-
-<div class="box">
-  <input type="file" id="file"><br>
-  <button onclick="generate()">Generate 3D</button>
-
-  <div id="status"></div>
-</div>
+<p id="status"></p>
 
 <script>
 async function generate() {
@@ -59,17 +15,17 @@ async function generate() {
   const status = document.getElementById("status");
 
   if (!file) {
-    alert("Select an image first");
+    alert("Select image");
     return;
   }
 
-  status.innerHTML = "⏳ Uploading & generating...";
+  status.innerText = "⏳ Processing...";
 
   const formData = new FormData();
   formData.append("image", file);
 
   try {
-    const res = await fetch("https://YOUR-WORKER-URL.workers.dev", {
+    const res = await fetch("https://bitter-mountain-4202.rajibyoutbe541.workers.dev/", {
       method: "POST",
       body: formData
     });
@@ -77,19 +33,17 @@ async function generate() {
     const data = await res.json();
 
     if (!data.success) {
-      status.innerHTML = "❌ Error: " + JSON.stringify(data);
+      status.innerText = "❌ Error: " + JSON.stringify(data);
       return;
     }
 
     status.innerHTML = `
-      ✅ Model Ready!<br><br>
-      <a href="${data.model.model_url}" target="_blank">
-        Download 3D Model
-      </a>
+      ✅ Done! <br><br>
+      <a href="${data.model.model_url}" target="_blank">Download Model</a>
     `;
 
   } catch (err) {
-    status.innerHTML = "❌ Failed: " + err.message;
+    status.innerText = "❌ Failed: " + err.message;
   }
 }
 </script>
