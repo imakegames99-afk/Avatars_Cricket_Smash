@@ -1,13 +1,43 @@
 <!DOCTYPE html>
 <html>
-<body style="background:#111;color:white;text-align:center;padding:40px">
+<head>
+  <title>3D Model Generator</title>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: Arial;
+      text-align: center;
+      padding: 40px;
+    }
 
-<h2>Upload Image → 3D Model</h2>
+    button {
+      padding: 10px 20px;
+      background: #00ffcc;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #00ccaa;
+    }
+
+    #status {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Upload Image → Generate 3D Model</h2>
 
 <input type="file" id="file" accept="image/*"><br><br>
+
 <button onclick="generate()">Generate</button>
 
-<p id="status"></p>
+<div id="status"></div>
 
 <script>
 async function generate() {
@@ -15,11 +45,11 @@ async function generate() {
   const status = document.getElementById("status");
 
   if (!file) {
-    alert("Select image");
+    alert("Please select an image");
     return;
   }
 
-  status.innerText = "⏳ Uploading & generating...";
+  status.innerText = "⏳ Uploading & generating... (20–60 sec)";
 
   const formData = new FormData();
   formData.append("image", file);
@@ -31,17 +61,18 @@ async function generate() {
     });
 
     const data = await res.json();
-    console.log("RESPONSE:", data);
+    console.log("FULL RESPONSE:", data);
 
     if (!data.success) {
       status.innerText = "❌ Error: " + JSON.stringify(data);
       return;
     }
 
+    // ✅ SUCCESS
     status.innerHTML = `
       ✅ 3D Model Generated!<br><br>
       <a href="${data.model.model_url}" target="_blank">
-        Download Model
+        Download 3D Model
       </a>
     `;
 
