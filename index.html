@@ -5,11 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Avatar Cricket Smash – 3D Face Creator</title>
 
-<!-- THREE JS -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/controls/OrbitControls.js"></script>
-
 <style>
 body {
     margin: 0;
@@ -30,7 +25,6 @@ header h1 {
     margin: 0;
 }
 
-/* NAV */
 nav {
     margin-top: 20px;
 }
@@ -50,14 +44,13 @@ nav a {
     text-align: center;
 }
 
-/* UPLOAD BOX */
+/* UPLOAD */
 .upload-box {
     border: 2px dashed #38bdf8;
     padding: 30px;
     border-radius: 12px;
 }
 
-/* BUTTON */
 .btn {
     margin-top: 15px;
     padding: 12px 25px;
@@ -84,7 +77,6 @@ nav a {
     color: #38bdf8;
 }
 
-/* FOOTER */
 footer {
     text-align: center;
     padding: 30px;
@@ -130,11 +122,17 @@ footer {
 © 2026 Avatar Cricket Smash
 </footer>
 
-<script>
-/* 🔥 PUT YOUR WORKER URL HERE */
-const BASE_URL = "https://bitter-mountain-4202.rajibyoutbe541.workers.dev";
+<!-- ✅ FIXED THREE JS MODULE VERSION -->
+<script type="module">
 
-/* 3D VARIABLES */
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js';
+
+/* 🔥 PUT YOUR WORKER URL HERE */
+const BASE_URL = "https://YOUR-WORKER-NAME.workers.dev";
+
+/* VARIABLES */
 let scene, camera, renderer, controls;
 let generatedModelUrl = "";
 let generatedTextureUrl = "";
@@ -159,7 +157,7 @@ function initViewer() {
     container.innerHTML = "";
     container.appendChild(renderer.domElement);
 
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls = new OrbitControls(camera, renderer.domElement);
 
     const light = new THREE.HemisphereLight(0xffffff, 0x444444, 2);
     scene.add(light);
@@ -175,7 +173,7 @@ function animate() {
 
 /* LOAD MODEL */
 function loadModel(url) {
-    const loader = new THREE.GLTFLoader();
+    const loader = new GLTFLoader();
 
     loader.load(
         url,
@@ -193,11 +191,12 @@ function loadModel(url) {
 }
 
 /* GENERATE */
-async function generate3D() {
+window.generate3D = async function () {
+
     const file = document.getElementById("imageInput").files[0];
 
     if (!file) {
-        alert("Please upload an image first");
+        alert("Upload image first");
         return;
     }
 
@@ -214,9 +213,10 @@ async function generate3D() {
 
         const data = await response.json();
 
+        console.log("API RESPONSE:", data);
+
         if (!data.model_url) {
-            console.error(data);
-            alert("Error generating model (check console)");
+            alert("Model not received (check console)");
             return;
         }
 
@@ -232,24 +232,19 @@ async function generate3D() {
     }
 
     document.getElementById("loading").style.display = "none";
-}
+};
 
 /* DOWNLOAD */
-function downloadModel() {
-    if (!generatedModelUrl) {
-        alert("Generate model first");
-        return;
-    }
+window.downloadModel = function () {
+    if (!generatedModelUrl) return alert("Generate first");
     window.open(generatedModelUrl);
-}
+};
 
-function downloadTexture() {
-    if (!generatedTextureUrl) {
-        alert("Generate texture first");
-        return;
-    }
+window.downloadTexture = function () {
+    if (!generatedTextureUrl) return alert("Generate first");
     window.open(generatedTextureUrl);
-}
+};
+
 </script>
 
 </body>
