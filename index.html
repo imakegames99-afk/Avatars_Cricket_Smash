@@ -8,7 +8,7 @@
 <style>
 body {
     margin: 0;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     background: linear-gradient(180deg, #020617, #0b3b82);
     color: white;
 }
@@ -47,6 +47,8 @@ nav a {
     background: #38bdf8;
     cursor: pointer;
     font-weight: bold;
+    position: relative;
+    z-index: 10; /* Ensure buttons stay above canvas */
 }
 
 #viewer {
@@ -55,6 +57,7 @@ nav a {
     background: black;
     margin-top: 30px;
     border-radius: 10px;
+    pointer-events: auto; /* allow interactions inside viewer */
 }
 
 #loading {
@@ -105,6 +108,7 @@ import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/exampl
 const BASE_URL = "https://bitter-mountain-4202.rajibyoutbe541.workers.dev";
 
 let scene, camera, renderer;
+let currentModel = null;
 let modelUrl = "";
 let textureUrl = "";
 
@@ -129,18 +133,25 @@ window.addEventListener("DOMContentLoaded", () => {
         );
         camera.position.set(0, 1, 3);
 
-        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(container.clientWidth, container.clientHeight);
 
         container.innerHTML = "";
         container.appendChild(renderer.domElement);
 
-        new OrbitControls(camera, renderer.domElement);
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
 
-        scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 2));
+        // Add lights
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 2);
+        scene.add(hemiLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+        dirLight.position.set(3, 10, 10);
+        scene.add(dirLight);
 
         function animate() {
             requestAnimationFrame(animate);
+            controls.update();
             renderer.render(scene, camera);
         }
         animate();
@@ -150,9 +161,10 @@ window.addEventListener("DOMContentLoaded", () => {
     function loadModel(url) {
         const loader = new GLTFLoader();
         loader.load(url, (gltf) => {
-            scene.clear();
-            scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 2));
-            scene.add(gltf.scene);
+            // Remove previous model only
+            if (currentModel) scene.remove(currentModel);
+            currentModel = gltf.scene;
+            scene.add(currentModel);
         });
     }
 
@@ -178,13 +190,16 @@ window.addEventListener("DOMContentLoaded", () => {
 
             if (!data.model_url) {
                 alert("Error generating model");
+                document.getElementById("loading").style.display = "none";
                 return;
             }
 
             modelUrl = data.model_url;
             textureUrl = data.texture_url;
 
-            initViewer();
+            // Initialize viewer if not yet
+            if (!scene) initViewer();
+
             loadModel(modelUrl);
 
         } catch (e) {
@@ -195,15 +210,15 @@ window.addEventListener("DOMContentLoaded", () => {
         document.getElementById("loading").style.display = "none";
     });
 
-    /* DOWNLOAD */
+    /* DOWNLOAD BUTTONS */
     downloadModelBtn.addEventListener("click", () => {
         if (!modelUrl) return alert("Generate first");
-        window.open(modelUrl);
+        window.open(modelUrl, "_blank");
     });
 
     downloadTextureBtn.addEventListener("click", () => {
         if (!textureUrl) return alert("Generate first");
-        window.open(textureUrl);
+        window.open(textureUrl, "_blank");
     });
 
 });
