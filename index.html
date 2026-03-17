@@ -1,55 +1,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Test 3D API</title>
+  <title>Cloudflare → Tripo 3D</title>
 </head>
+<body>
 
-<body style="text-align:center; padding:50px; font-family:Arial;">
+<h2>Upload Image → Generate 3D</h2>
 
-<h1>Test Upload</h1>
+<input type="file" id="fileInput">
+<button onclick="uploadAndGenerate()">Upload & Generate</button>
 
-<input type="file" id="imageInput"><br><br>
-<button onclick="generate()">Generate</button>
-
-<p id="result"></p>
+<pre id="output"></pre>
 
 <script>
+const CLOUDFLARE_ACCOUNT_ID = "YOUR_ACCOUNT_ID";
+const CLOUDFLARE_UPLOAD_TOKEN = "YOUR_UNSIGNED_UPLOAD_TOKEN";
+const TRIPO_API_KEY = "YOUR_TRIPO_API_KEY";
 
-const BASE_URL = "https://bitter-mountain-4202.rajibyoutbe541.workers.dev";
+async function uploadAndGenerate() {
+  const file = document.getElementById("fileInput").files[0];
+  if (!file) return alert("Select an image");
 
-async function generate() {
+  // STEP 1: Upload to Cloudflare
+  const formData = new FormData();
+  formData.append("file", file);
 
-    console.log("Clicked");
-
-    const file = document.getElementById("imageInput").files[0];
-
-    if (!file) {
-        alert("Upload image first");
-        return;
+  const uploadRes = await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/images/v1`,
+    {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + CLOUDFLARE_UPLOAD_TOKEN
+      },
+      body: formData
     }
+  );
 
-    const formData = new FormData();
-    formData.append("image", file);
+  const uploadData = await uploadRes.json();
+  console.log("Upload:", uploadData);
 
-    try {
-        const res = await fetch(BASE_URL + "/generate", {
-            method: "POST",
-            body: formData
-        });
+  if (!uploadData.success) {
+    document.getElementById("output").innerText = "Upload failed";
+    return;
+  }
 
-        const data = await res.json();
+  // Get public URL
+  const imageUrl = uploadData.result.variants[0];
+  console.log("Image URL:", imageUrl);
 
-        console.log(data);
+  // STEP 2: Send to Tripo
+  const taskRes = await fetch("https://api.tripo3d.ai/v2/openapi/task", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + TRIPO_API_KEY,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      type: "image_to_model",
+      input: {
+        image_url: imageUrl
+      }
+    })
+  });
 
-        document.getElementById("result").innerText =
-            JSON.stringify(data, null, 2);
+  const taskData = await taskRes.json();
+  document.getElementById("output").innerText = JSON.stringify(taskData, null, 2);
 
-    } catch (e) {
-        console.error(e);
-        alert("Error");
-    }
+  const taskId = taskData?.data?.task_id;
+  if (taskId) checkStatus(taskId);
 }
 
+// STEP 3: Poll Tripo
+async function checkStatus(taskId) {
+  const interval = setInterval(async () => {
+    const res = await fetch(`https://api.tripo3d.ai/v2/openapi/task/${taskId}`, {
+      headers: {
+        "Authorization": "Bearer " + TRIPO_API_KEY
+      }
+    });
+
+    const data = await res.json();
+    document.getElementById("output").innerText = JSON.stringify(data, null, 2);
+
+    if (data.data.status === "success") {
+      clearInterval(interval);
+      alert("✅ 3D Model Ready!");
+      console.log("MODEL:", data.data.output);
+    }
+
+    if (data.data.status === "failed") {
+      clearInterval(interval);
+      alert("❌ Failed");
+    }
+
+  }, 5000);
+}
 </script>
 
 </body>
