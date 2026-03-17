@@ -1,165 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avatar Cricket Smash – 3D Face Creator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avatar Cricket Smash – 3D Face Creator</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/controls/OrbitControls.js"></script>
+<!-- THREE JS -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/controls/OrbitControls.js"></script>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial;
-            background: linear-gradient(180deg, #020617, #0b3b82);
-            color: white;
-            text-align: center;
-        }
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(180deg, #020617, #0b3b82);
+    color: white;
+}
 
-        header {
-            padding: 40px;
-        }
+/* HEADER */
+header {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #020617, #1d4ed8);
+}
 
-        #viewer {
-            width: 100%;
-            height: 400px;
-            background: black;
-            margin-top: 20px;
-        }
+header h1 {
+    color: #38bdf8;
+    margin: 0;
+}
 
-        .btn {
-            padding: 12px 25px;
-            margin-top: 15px;
-            border-radius: 999px;
-            border: none;
-            background: #38bdf8;
-            cursor: pointer;
-        }
+/* NAV */
+nav {
+    margin-top: 20px;
+}
 
-        #loading {
-            display: none;
-            margin-top: 15px;
-        }
-    </style>
+nav a {
+    margin: 0 10px;
+    color: #7dd3fc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* MAIN */
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px;
+    text-align: center;
+}
+
+/* UPLOAD BOX */
+.upload-box {
+    border: 2px dashed #38bdf8;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+/* BUTTON */
+.btn {
+    margin-top: 15px;
+    padding: 12px 25px;
+    border-radius: 999px;
+    border: none;
+    background: #38bdf8;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* VIEWER */
+#viewer {
+    width: 100%;
+    height: 400px;
+    background: black;
+    margin-top: 30px;
+    border-radius: 10px;
+}
+
+/* LOADING */
+#loading {
+    display: none;
+    margin-top: 15px;
+    color: #38bdf8;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #94a3b8;
+}
+</style>
 </head>
 
 <body>
 
-    <header>
-        <h1>3D Face Creator</h1>
-        <p>Upload → Generate → Download</p>
-    </header>
+<header>
+<h1>Avatar Cricket Smash</h1>
+<p>Create your own 3D face and download it for the game</p>
 
-    <input type="file" id="imageInput" accept="image/*"><br>
-    <button class="btn" onclick="generate3D()">Generate 3D Face</button>
+<nav>
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<a href="privacy.html">Privacy</a>
+<a href="terms.html">Terms</a>
+<a href="ind.html">India</a>
+</nav>
+</header>
 
-    <div id="loading">⏳ Generating...</div>
+<div class="container">
 
-    <div id="viewer"></div>
+<h2>Generate Your 3D Face</h2>
 
-    <button class="btn" onclick="downloadModel()">Download Mesh</button>
-    <button class="btn" onclick="downloadTexture()">Download Texture</button>
+<div class="upload-box">
+<input type="file" id="imageInput" accept="image/*"><br>
+<button class="btn" onclick="generate3D()">Generate 3D Face</button>
+</div>
 
-    <script>
-        const BASE_URL = "bitter-mountain-4202.rajibyoutbe541.workers.dev"; // 🔥 CHANGE THIS
+<div id="loading">⏳ Generating your 3D face...</div>
 
-        let scene, camera, renderer, controls;
-        let generatedModelUrl = "";
-        let generatedTextureUrl = "";
+<div id="viewer"></div>
 
-        /* INIT VIEWER */
-        function initViewer() {
-            const container = document.getElementById("viewer");
+<button class="btn" onclick="downloadModel()">Download Mesh</button>
+<button class="btn" onclick="downloadTexture()">Download Texture</button>
 
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.set(0, 1, 3);
+</div>
 
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
+<footer>
+© 2026 Avatar Cricket Smash
+</footer>
 
-            container.innerHTML = "";
-            container.appendChild(renderer.domElement);
+<script>
+/* 🔥 PUT YOUR WORKER URL HERE */
+const BASE_URL = "https://bitter-mountain-4202.rajibyoutbe541.workers.dev";
 
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
+/* 3D VARIABLES */
+let scene, camera, renderer, controls;
+let generatedModelUrl = "";
+let generatedTextureUrl = "";
 
-            const light = new THREE.HemisphereLight(0xffffff, 0x444444, 2);
-            scene.add(light);
+/* INIT VIEWER */
+function initViewer() {
+    const container = document.getElementById("viewer");
 
-            animate();
+    scene = new THREE.Scene();
+
+    camera = new THREE.PerspectiveCamera(
+        75,
+        container.clientWidth / container.clientHeight,
+        0.1,
+        1000
+    );
+    camera.position.set(0, 1, 3);
+
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+
+    container.innerHTML = "";
+    container.appendChild(renderer.domElement);
+
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+    const light = new THREE.HemisphereLight(0xffffff, 0x444444, 2);
+    scene.add(light);
+
+    animate();
+}
+
+/* ANIMATE */
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+
+/* LOAD MODEL */
+function loadModel(url) {
+    const loader = new THREE.GLTFLoader();
+
+    loader.load(
+        url,
+        function(gltf) {
+            scene.clear();
+            scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 2));
+            scene.add(gltf.scene);
+        },
+        undefined,
+        function(error) {
+            console.error(error);
+            alert("Failed to load 3D model");
+        }
+    );
+}
+
+/* GENERATE */
+async function generate3D() {
+    const file = document.getElementById("imageInput").files[0];
+
+    if (!file) {
+        alert("Please upload an image first");
+        return;
+    }
+
+    document.getElementById("loading").style.display = "block";
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+        const response = await fetch(`${BASE_URL}/generate`, {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (!data.model_url) {
+            console.error(data);
+            alert("Error generating model (check console)");
+            return;
         }
 
-        function animate() {
-            requestAnimationFrame(animate);
-            renderer.render(scene, camera);
-        }
+        generatedModelUrl = data.model_url;
+        generatedTextureUrl = data.texture_url;
 
-        /* LOAD MODEL */
-        function loadModel(url) {
-            const loader = new THREE.GLTFLoader();
+        initViewer();
+        loadModel(generatedModelUrl);
 
-            loader.load(url, function (gltf) {
-                scene.clear();
+    } catch (error) {
+        console.error(error);
+        alert("Error generating model");
+    }
 
-                const light = new THREE.HemisphereLight(0xffffff, 0x444444, 2);
-                scene.add(light);
+    document.getElementById("loading").style.display = "none";
+}
 
-                scene.add(gltf.scene);
+/* DOWNLOAD */
+function downloadModel() {
+    if (!generatedModelUrl) {
+        alert("Generate model first");
+        return;
+    }
+    window.open(generatedModelUrl);
+}
 
-            }, undefined, function (error) {
-                console.error(error);
-            });
-        }
-
-        /* GENERATE */
-        async function generate3D() {
-            const file = document.getElementById("imageInput").files[0];
-
-            if (!file) {
-                alert("Upload image first!");
-                return;
-            }
-
-            document.getElementById("loading").style.display = "block";
-
-            const formData = new FormData();
-            formData.append("image", file);
-
-            try {
-                const response = await fetch(`${BASE_URL}/generate`, {
-                    method: "POST",
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                generatedModelUrl = data.model_url;
-                generatedTextureUrl = data.texture_url;
-
-                initViewer();
-                loadModel(generatedModelUrl);
-
-            } catch (err) {
-                alert("Error generating model");
-                console.error(err);
-            }
-
-            document.getElementById("loading").style.display = "none";
-        }
-
-        /* DOWNLOAD */
-        function downloadModel() {
-            if (!generatedModelUrl) return alert("Generate first");
-            window.open(generatedModelUrl);
-        }
-
-        function downloadTexture() {
-            if (!generatedTextureUrl) return alert("Generate first");
-            window.open(generatedTextureUrl);
-        }
-    </script>
+function downloadTexture() {
+    if (!generatedTextureUrl) {
+        alert("Generate texture first");
+        return;
+    }
+    window.open(generatedTextureUrl);
+}
+</script>
 
 </body>
 </html>
